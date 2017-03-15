@@ -17,7 +17,6 @@ const session   = require('express-session');
 const path      = require('path');
 
 const Rutas     = require('./website/models/rutas');
-const Mongo     = require('./website/controllers/mongodb');
 
 class Server {
   constructor(config = {}){
@@ -48,7 +47,6 @@ class Server {
     ruteo.get();
     ruteo.post();
 
-    let db = new Mongo();
   }
 }
 

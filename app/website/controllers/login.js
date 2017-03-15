@@ -9,7 +9,33 @@
 
 */
 
-const schema = require('../models/db/schema');
+// Database simulation
+let db =[
+  {
+    email: 'kimvex@kimvex.com',
+    pass: '1234'
+  }
+]
+
+// function Promise for verify if exist email on the data base
+function base(email){
+
+  let promesa = new Promise((resolve, reject) => {
+
+      let dato = db.find(data => {
+
+        return data.email === email;
+
+      });
+
+      if(dato) resolve(dato);
+      reject(Error('Mail no exist'));
+
+  });
+
+  return promesa;
+
+}
 
 class Login {
   constructor(config = {}){
@@ -17,20 +43,34 @@ class Login {
     let {sol, res, email, pass, next} = config;
     let hour = 3600000;
 
-    schema.users.findOne({email: email})
+    // Send data
+    base(email)
       .then(data => {
-        if(pass = data.pass){
+
+        if(data.pass == pass){
+
+          // if password is equal at "pass" send for user set cookies
           sol.session.name = email;
           sol.session.cookie.expires = new Date(Date.now() + hour);
           console.log(sol.session);
+
+          // return at client status 200
           res.status(200);
-        }else{
+
+        } else {
+
+          // return at client status 201
           res.status(201);
+
         }
+
       })
       .catch(err => {
-        if(err) throw err;
+
+        if(err) console.log(err);
+
       });
+
   }
 }
 
